@@ -1,0 +1,35 @@
+ - Json - Lightweight JSON serialization
+   [BSD 3-Clause License]
+   https://git.dorkbox.com/dorkbox/Collections
+   Copyright 2023
+     Dorkbox LLC
+
+   Extra license information
+     - JsonBeans - A lightweight library that makes it easy to serialize and deserialize Java object graphs to and from JSON
+       [BSD 3-Clause License]
+       https://github.com/EsotericSoftware/jsonbeans
+       Copyright 2010
+         Nathan Sweet
+
+     - Kotlin - 
+       [The Apache Software License, Version 2.0]
+       https://github.com/JetBrains/kotlin
+       Copyright 2020
+         JetBrains s.r.o. and Kotlin Programming Language contributors
+       Kotlin Compiler, Test Data+Libraries, and Tools repository contain third-party code, to which different licenses may apply
+       See: https://github.com/JetBrains/kotlin/blob/master/license/README.md
+
+     - Updates - Software Update Management
+       [The Apache Software License, Version 2.0]
+       https://git.dorkbox.com/dorkbox/Updates
+       Copyright 2021
+         Dorkbox LLC
+
+       Extra license information
+         - Kotlin - 
+           [The Apache Software License, Version 2.0]
+           https://github.com/JetBrains/kotlin
+           Copyright 2020
+             JetBrains s.r.o. and Kotlin Programming Language contributors
+           Kotlin Compiler, Test Data+Libraries, and Tools repository contain third-party code, to which different licenses may apply
+           See: https://github.com/JetBrains/kotlin/blob/master/license/README.md
