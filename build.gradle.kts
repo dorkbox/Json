@@ -61,7 +61,7 @@ licensing {
         author(Extras.vendor)
         url(Extras.url)
 
-        extra("LibGDX", License.APACHE_2) {
+        extra("LibGDX Json Utils", License.APACHE_2) {
             copyright(2011)
             description("Java object graphs, to and from JSON automatically")
             author("Mario Zechner")
