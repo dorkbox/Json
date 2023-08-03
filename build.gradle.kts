@@ -88,6 +88,7 @@ tasks.jar.get().apply {
 
 dependencies {
     api("com.dorkbox:Updates:1.1")
+    api("com.dorkbox:Collections:2.0")
 
     testImplementation("junit:junit:4.13.2")
 }
