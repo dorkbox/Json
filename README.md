@@ -13,7 +13,7 @@ Reflection based JSON reading and writing
 
 ## Overview
 
-Json is a lightweight library that makes it easy to serialize and deserialize Java object graphs to and from JSON. The JAR is 45k and has no dependencies. It is not designed to be fast or optimized, but rather to be simple and without dependencies. Four small classes make up the important parts of the library:
+Json is a lightweight library that makes it easy to serialize and deserialize Java object graphs to and from JSON. The JAR is 45k and has minimal dependencies. It is not designed to be fast or optimized, but rather to be simple and easy to understand. Four small classes make up the important parts of the library:
 
 - `JsonWriter`: A builder style API for emitting JSON.
 - `JsonReader`: Parses JSON and builds a DOM of `JsonValue` objects.
