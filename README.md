@@ -248,13 +248,13 @@ Serialization can be customized by either having the class to be serialized impl
     }
 ```
 
-In the `Json.Serializable` interface methods, the `Json` instance is given. It has many methods to read and write data to the JSON. When using `Json.Serializable`, the surrounding JSON object is handled automatically in the `write` method. This is why the `read` method always receives a `JsonMap`.
+In the `JsonSerializable` interface methods, the `Json` instance is given. It has many methods to read and write data to the JSON. When using `JsonSerializable`, the surrounding JSON object is handled automatically in the `write` method. This is why the `read` method always receives a `JsonMap`.
 
-`Json.Serializer` provides more control over what is output, requiring `writeObjectStart` and `writeObjectEnd` to be called to achieve the same effect. A JSON array or a simple value could be output instead of an object. `Json.Serializer` also allows the object creation to be customized.
+`JsonSerializer` provides more control over what is output, requiring `writeObjectStart` and `writeObjectEnd` to be called to achieve the same effect. A JSON array or a simple value could be output instead of an object. `JsonSerializer` also allows the object creation to be customized.
 
 ```java
     Json json = new Json();
-    json.setSerializer(PhoneNumber.class, new Json.Serializer<PhoneNumber>() {
+    json.setSerializer(PhoneNumber.class, new JsonSerializer<PhoneNumber>() {
        public void write (Json json, PhoneNumber number, Class knownType) {
           json.writeObjectStart();
           json.writeValue(number.name, number.number);
