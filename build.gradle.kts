@@ -25,7 +25,7 @@ gradle.startParameter.showStacktrace = ShowStacktrace.ALWAYS   // always show th
 
 plugins {
     id("com.dorkbox.GradleUtils") version "3.17"
-    id("com.dorkbox.Licensing") version "2.22"
+    id("com.dorkbox.Licensing") version "2.25"
     id("com.dorkbox.VersionUpdate") version "2.8"
     id("com.dorkbox.GradlePublish") version "1.18"
 
@@ -88,7 +88,7 @@ tasks.jar.get().apply {
 
 dependencies {
     api("com.dorkbox:Updates:1.1")
-    api("com.dorkbox:Collections:2.0")
+    api("com.dorkbox:Collections:2.1")
 
     testImplementation("junit:junit:4.13.2")
 }
