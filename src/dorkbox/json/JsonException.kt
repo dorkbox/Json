@@ -32,9 +32,10 @@ package dorkbox.json
 
 /**
  * Indicates an error during serialization due to misconfiguration or during deserialization due to invalid input data.
+ *
  * @author Nathan Sweet - misc@n4te.com
  */
-class JsonException : RuntimeException {
+class JsonException : Exception {
     private var trace: StringBuilder? = null
 
     constructor() : super()
