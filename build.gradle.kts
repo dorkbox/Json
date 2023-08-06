@@ -36,7 +36,7 @@ object Extras {
     // set for the project
     const val description = "Lightweight Kotlin/JSON serialization"
     const val group = "com.dorkbox"
-    const val version = "1.0"
+    const val version = "1.1"
 
     // set as project.ext
     const val name = "Json"
@@ -88,7 +88,7 @@ tasks.jar.get().apply {
 
 dependencies {
     api("com.dorkbox:Updates:1.1")
-    api("com.dorkbox:Collections:2.2")
+    api("com.dorkbox:Collections:2.3")
 
     testImplementation("junit:junit:4.13.2")
 }
