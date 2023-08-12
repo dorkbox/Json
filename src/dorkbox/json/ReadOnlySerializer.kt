@@ -31,6 +31,6 @@
 package dorkbox.json
 
 abstract class ReadOnlySerializer<T> : JsonSerializer<T> {
-    override fun write(json: JsonProcessor, `object`: T?, knownType: Class<T>?) {}
-    abstract override fun read(json: JsonProcessor, jsonData: JsonValue, type: Class<T>?): T?
+    override fun write(json: Json, `object`: T?, knownType: Class<T>?) {}
+    abstract override fun read(json: Json, jsonData: JsonValue, type: Class<T>?): T?
 }

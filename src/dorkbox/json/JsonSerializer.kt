@@ -31,6 +31,6 @@
 package dorkbox.json
 
 interface JsonSerializer<T> {
-    fun write(json: JsonProcessor, `object`: T?, knownType: Class<T>?)
-    fun read(json: JsonProcessor, jsonData: JsonValue, type: Class<T>?): T?
+    fun write(json: Json, `object`: T?, knownType: Class<T>?)
+    fun read(json: Json, jsonData: JsonValue, type: Class<T>?): T?
 }

@@ -15,7 +15,6 @@
  */
 package dorkbox
 
-import dorkbox.json.JsonProcessor
 import dorkbox.json.Json
 import org.junit.Assert
 import org.junit.Test
@@ -27,7 +26,7 @@ class AnnotationTest {
 
     @Test
     fun annotationTest() {
-        val json = JsonProcessor()
+        val json = Json()
 
         val conf = Config()
         val jsonString = json.toJson(conf)
@@ -45,15 +44,15 @@ class AnnotationTest {
     }
 
     class Config {
-        @Json("ip_address")
+        @dorkbox.json.annotation.Json("ip_address")
         var ip = "127.0.0.1"
 
         var server = false
 
-        @Json("json_client_val")
+        @dorkbox.json.annotation.Json("json_client_val")
         var client = true
 
-        @Json("hot", ignore = true)
+        @dorkbox.json.annotation.Json("hot", ignore = true)
         var hotDogs = true
     }
 }
