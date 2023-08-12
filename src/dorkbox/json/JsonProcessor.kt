@@ -267,7 +267,7 @@ open class JsonProcessor {
                     continue
                 }
             }
-            val fieldJsonName = field.annotations.filterIsInstance<Alias>().firstOrNull()?.alias ?: field.name
+            val fieldJsonName = field.annotations.filterIsInstance<Json>().firstOrNull()?.alias ?: field.name
 
             nameToField.put(fieldJsonName, FieldMetadata(field))
             i++
@@ -406,7 +406,7 @@ open class JsonProcessor {
                     }
                 }
 
-                val fieldJsonName = field.annotations.filterIsInstance<Alias>().firstOrNull()?.alias ?: field.name
+                val fieldJsonName = field.annotations.filterIsInstance<Json>().firstOrNull()?.alias ?: field.name
 
                 if (debug) println("Writing field: ${field.name} (json=$fieldJsonName) (${type.getName()})")
                 writer!!.name(fieldJsonName)

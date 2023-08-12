@@ -16,7 +16,7 @@
 package dorkbox
 
 import dorkbox.json.JsonProcessor
-import dorkbox.json.Alias
+import dorkbox.json.Json
 import org.junit.Assert
 import org.junit.Test
 
@@ -42,12 +42,12 @@ class AnnotationTest {
     }
 
     class Config {
-        @Alias("ip_address")
+        @Json("ip_address")
         var ip = "127.0.0.1"
 
         var server = false
 
-        @Alias("json_client_val")
+        @Json("json_client_val")
         var client = true
     }
 }

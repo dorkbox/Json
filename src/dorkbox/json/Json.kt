@@ -20,7 +20,7 @@ package dorkbox.json
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FIELD)
-annotation class Alias(
+annotation class Json(
     /**
      * This is used to create an alias for a JSON java/kotlin field, to translate between JSON data\.
      */
