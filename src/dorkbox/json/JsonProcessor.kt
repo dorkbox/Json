@@ -267,8 +267,13 @@ open class JsonProcessor {
                     continue
                 }
             }
-            val fieldJsonName = field.annotations.filterIsInstance<Json>().firstOrNull()?.alias ?: field.name
+            val annotation = field.annotations.filterIsInstance<Json>().firstOrNull()
+            if (annotation?.ignore == true) {
+                i++
+                continue
+            }
 
+            val fieldJsonName = annotation?.name ?: field.name
             nameToField.put(fieldJsonName, FieldMetadata(field))
             i++
         }
@@ -406,7 +411,12 @@ open class JsonProcessor {
                     }
                 }
 
-                val fieldJsonName = field.annotations.filterIsInstance<Json>().firstOrNull()?.alias ?: field.name
+                val annotation = field.annotations.filterIsInstance<Json>().firstOrNull()
+                if (annotation?.ignore == true) {
+                    return@forEach
+                }
+
+                val fieldJsonName = annotation?.name ?: field.name
 
                 if (debug) println("Writing field: ${field.name} (json=$fieldJsonName) (${type.getName()})")
                 writer!!.name(fieldJsonName)

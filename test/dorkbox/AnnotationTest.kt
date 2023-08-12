@@ -32,6 +32,9 @@ class AnnotationTest {
         val conf = Config()
         val jsonString = json.toJson(conf)
 
+        // NOTE: hotDog is ignored!!
+        Assert.assertEquals("{ip_address:127.0.0.1,server:false,json_client_val:true}", jsonString)
+
         val newConf = json.fromJson(Config::class.java, jsonString)
 
         Assert.assertTrue(newConf != null)
@@ -49,6 +52,9 @@ class AnnotationTest {
 
         @Json("json_client_val")
         var client = true
+
+        @Json("hot", ignore = true)
+        var hotDogs = true
     }
 }
 
