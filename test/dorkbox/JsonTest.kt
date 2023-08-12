@@ -34,7 +34,7 @@
 package dorkbox
 
 import dorkbox.collections.ObjectMap
-import dorkbox.json.Json
+import dorkbox.json.JsonProcessor
 import dorkbox.json.OutputType
 import org.junit.Test
 
@@ -42,7 +42,7 @@ class JsonTest {
 
     @Test
     fun create() {
-        val json = Json()
+        val json = JsonProcessor()
 
         var test = Test1()
         test.booleanField = true
@@ -187,7 +187,7 @@ class JsonTest {
         println("Success!")
     }
 
-    private fun roundTrip(json: Json, `object`: Any): String {
+    private fun roundTrip(json: JsonProcessor, `object`: Any): String {
         var text = json.toJson(`object`)
         println(text)
         test(json, text, `object`)
@@ -197,7 +197,7 @@ class JsonTest {
     }
 
     private fun testObjectGraph(`object`: TestMapGraph, typeName: String) {
-        val json = Json()
+        val json = JsonProcessor()
         json.typeName = typeName
         json.usePrototypes = false
         json.ignoreUnknownFields = true
@@ -215,7 +215,7 @@ class JsonTest {
 //        }
     }
 
-    private fun test(json: Json, text: String, `object`: Any) {
+    private fun test(json: JsonProcessor, text: String, `object`: Any) {
         var text = text
         check(json, text, `object`)
         text = text.replace("{", "/*moo*/{/*moo*/")
@@ -240,7 +240,7 @@ class JsonTest {
         check(json, text, `object`)
     }
 
-    private fun check(json: Json, text: String, `object`: Any) {
+    private fun check(json: JsonProcessor, text: String, `object`: Any) {
         val object2 = json.fromJson(`object`.javaClass, text)
         equals(`object`, object2)
     }

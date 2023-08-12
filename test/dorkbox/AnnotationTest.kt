@@ -15,7 +15,7 @@
  */
 package dorkbox
 
-import dorkbox.json.Json
+import dorkbox.json.JsonProcessor
 import dorkbox.json.Alias
 import org.junit.Assert
 import org.junit.Test
@@ -27,7 +27,7 @@ class AnnotationTest {
 
     @Test
     fun annotationTest() {
-        val json = Json()
+        val json = JsonProcessor()
 
         val conf = Config()
         val jsonString = json.toJson(conf)
