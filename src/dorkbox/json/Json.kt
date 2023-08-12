@@ -22,7 +22,12 @@ package dorkbox.json
 @Target(AnnotationTarget.FIELD)
 annotation class Json(
     /**
-     * This is used to create an alias for a JSON java/kotlin field, to translate between JSON data\.
+     * This is used to create an alias for a JSON java/kotlin field, to translate between JSON data and Java object.
      */
-    val alias: String = ""
+    val name: String = "",
+
+    /**
+     * This is used to signify that we will ignore this field when reading/writing JSON
+     */
+    val ignore: Boolean = false
 )
