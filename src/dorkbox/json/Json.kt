@@ -703,6 +703,30 @@ open class Json {
                 return
             }
 
+            // with kotlin, this is listOf(). Additionally with java, this is Arrays.toList()
+            if (value::class.java.typeName == "java.util.Arrays\$ArrayList") {
+                if (knownType != null && actualType != knownType && actualType.typeName != "java.util.Arrays\$ArrayList") {
+                    throw JsonException(
+                        """
+    Serialization of an Array other than the known type is not supported.
+    Known type: $knownType
+    Actual type: $actualType
+    """.trimIndent()
+                    )
+                }
+
+                writeArrayStart()
+                val array = value as java.util.AbstractList<*>
+                var i = 0
+                val n = array.size
+                while (i < n) {
+                    writeValue(array[i], elementType, null)
+                    i++
+                }
+                writeArrayEnd()
+                return
+            }
+
             if (value is Collection<*>) {
                 if (typeName != null &&
                     actualType != ArrayList::class.java &&
@@ -1530,7 +1554,7 @@ open class Json {
         /**
          * Gets the version number.
          */
-        const val version = "1.4"
+        const val version = "1.5"
 
         init {
             // Add this project to the updates system, which verifies this class + UUID + version information
