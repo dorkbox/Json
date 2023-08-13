@@ -161,6 +161,17 @@ open class Json {
      */
     var writeDefaultFields = true
 
+    /**
+     * When true, will throw an exception when reading data that does not exist in the specified object.
+     * When false, will output to the logger that there is an error, but it will continue
+     */
+    var exceptionOnMissingFields = true
+
+    /**
+     * Customize the logger to use when JSON parsing exceptions are encountered
+     */
+    var logger: org.slf4j.Logger? = null
+
     private val typeToFields = ObjectMap<Class<*>, OrderedMap<String, FieldMetadata>>()
     private val tagToClass = ObjectMap<String, Class<*>?>()
     private val classToTag = ObjectMap<Class<*>, String>()
@@ -176,7 +187,7 @@ open class Json {
         this.outputType = outputType
     }
 
-    /** Sets a tag to use instead of the fully qualifier class name. This can make the JSON easier to read.  */
+    /** Sets a tag to use instead of the fully qualified class name. This can make the JSON easier to read.  */
     fun addClassTag(tag: String, type: Class<Any>) {
         tagToClass.put(tag, type)
         classToTag.put(type, tag)
@@ -211,8 +222,17 @@ open class Json {
      * does not need to be written unless different from the element type.
      */
     fun setElementType(type: Class<*>, fieldName: String, elementType: Class<*>?) {
-        val metadata = getFields(type).get(fieldName) ?: throw JsonException("Field not found: " + fieldName + " (" + type.getName() + ")")
-        metadata.elementType = elementType
+        val metadata = getFields(type).get(fieldName)
+        if (metadata == null) {
+            val message = "Field not found: $fieldName (${type.getName()})"
+
+            logger?.error(message)
+            if (exceptionOnMissingFields) {
+                throw JsonException(message)
+            }
+        } else {
+            metadata.elementType = elementType
+        }
     }
 
     /**
@@ -222,8 +242,18 @@ open class Json {
      * @see .setReadDeprecated
      */
     fun setDeprecated(type: Class<*>, fieldName: String, deprecated: Boolean) {
-        val metadata = getFields(type).get(fieldName) ?: throw JsonException("Field not found: " + fieldName + " (" + type.getName() + ")")
-        metadata.deprecated = deprecated
+        val metadata = getFields(type).get(fieldName)
+
+        if (metadata == null) {
+            val message = "Field not found: " + fieldName + " (" + type.getName() + ")"
+
+            logger?.error(message)
+            if (exceptionOnMissingFields) {
+                throw JsonException(message)
+            }
+        } else {
+            metadata.deprecated = deprecated
+        }
     }
 
     private fun getFields(type: Class<*>): OrderedMap<String, FieldMetadata> {
@@ -514,6 +544,7 @@ open class Json {
         var elementType = elementType
         val type: Class<*> = `object`.javaClass
 
+        // this should never happen!
         val metadata = getFields(type).get(fieldName) ?:
             throw JsonException("""Field not found: $fieldName (${type.getName()})""")
 
@@ -1022,15 +1053,23 @@ open class Json {
         var elementType = elementType
         val type: Class<*> = `object`.javaClass
 
-        val metadata = getFields(type).get(fieldName) ?:
-            throw JsonException("Field not found: $fieldName (${type.getName()})")
+        val metadata = getFields(type).get(fieldName)
 
-        val field = metadata.field
-        if (elementType == null) {
-            elementType = metadata.elementType
+        if (metadata == null) {
+            val message = "Field not found: $fieldName (${type.getName()})"
+
+            logger?.error(message)
+            if (exceptionOnMissingFields) {
+                throw JsonException(message)
+            }
+        } else {
+            val field = metadata.field
+            if (elementType == null) {
+                elementType = metadata.elementType
+            }
+
+            readField(`object`, field, jsonName, elementType, jsonMap)
         }
-
-        readField(`object`, field, jsonName, elementType, jsonMap)
     }
 
     /**
@@ -1075,9 +1114,14 @@ open class Json {
                     child = child.next
                     continue
                 } else {
-                    val ex = JsonException("Field not found: ${child.name} (${type.getName()})")
-                    ex.addTrace(child.trace())
-                    throw ex
+                    val message = "Field not found: ${child.name} (${type.getName()})"
+                    val exception = JsonException(message)
+                    exception.addTrace(child.trace())
+
+                    logger?.error(message, exception)
+                    if (exceptionOnMissingFields) {
+                        throw exception
+                    }
                 }
             } else {
                 if (ignoreDeprecated && !readDeprecated && metadata.deprecated) {
@@ -1086,20 +1130,23 @@ open class Json {
                 }
             }
 
-            val field = metadata.field
-            try {
-                field[`object`] = readValue(field.type, metadata.elementType, child)
-            } catch (ex: IllegalAccessException) {
-                throw JsonException("Error accessing field: ${field.name} (${type.getName()})", ex)
-            } catch (ex: JsonException) {
-                ex.addTrace("${field.name} (${type.getName()})")
-                throw ex
-            } catch (runtimeEx: RuntimeException) {
-                val ex = JsonException(runtimeEx)
-                ex.addTrace(child.trace())
-                ex.addTrace("${field.name} (${type.getName()})")
-                throw ex
+            if (metadata != null) {
+                val field = metadata.field
+                try {
+                    field[`object`] = readValue(field.type, metadata.elementType, child)
+                } catch (ex: IllegalAccessException) {
+                    throw JsonException("Error accessing field: ${field.name} (${type.getName()})", ex)
+                } catch (ex: JsonException) {
+                    ex.addTrace("${field.name} (${type.getName()})")
+                    throw ex
+                } catch (runtimeEx: RuntimeException) {
+                    val ex = JsonException(runtimeEx)
+                    ex.addTrace(child.trace())
+                    ex.addTrace("${field.name} (${type.getName()})")
+                    throw ex
+                }
             }
+
 
             child = child.next
         }
