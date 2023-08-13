@@ -36,11 +36,11 @@ object Extras {
     // set for the project
     const val description = "Lightweight Kotlin/JSON serialization"
     const val group = "com.dorkbox"
-    const val version = "1.4"
+    const val version = "1.5"
 
     // set as project.ext
     const val name = "Json"
-    const val id = "Json" // this is the maven ID!
+    const val id = "Json" // this is the maven ID!d
     const val vendor = "Dorkbox LLC"
     const val vendorUrl = "https://dorkbox.com"
     const val url = "https://git.dorkbox.com/dorkbox/Json"

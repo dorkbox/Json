@@ -287,7 +287,7 @@ Maven Info
     <dependency>
       <groupId>com.dorkbox</groupId>
       <artifactId>Json</artifactId>
-      <version>1.4</version>
+      <version>1.5</version>
     </dependency>
 </dependencies>
 ```
@@ -297,7 +297,7 @@ Gradle Info
 ```
 dependencies {
     ...
-    implementation("com.dorkbox:Json:1.4")
+    implementation("com.dorkbox:Json:1.5")
 }
 ```
 
