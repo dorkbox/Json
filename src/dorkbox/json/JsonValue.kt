@@ -1048,7 +1048,11 @@ class JsonValue : Iterable<JsonValue?> {
                     i++
                 }
             }
-        } else if (name!!.indexOf('.') != -1) trace = ".\"" + name!!.replace("\"", "\\\"") + "\"" else trace = ".$name"
+        } else if (name!!.indexOf('.') != -1) {
+            trace = ".\"" + name!!.replace("\"", "\\\"") + "\""
+        } else {
+            trace = ".$name"
+        }
         return parent!!.trace() + trace
     }
 
