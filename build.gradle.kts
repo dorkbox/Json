@@ -88,9 +88,9 @@ tasks.jar.get().apply {
 
 dependencies {
     api("com.dorkbox:Updates:1.1")
-    api("com.dorkbox:Collections:2.3")
+    api("com.dorkbox:Collections:2.4")
 
-    api("org.slf4j:slf4j-api:2.0.7")
+    implementation("org.slf4j:slf4j-api:2.0.7")
 
     testImplementation("junit:junit:4.13.2")
 }
