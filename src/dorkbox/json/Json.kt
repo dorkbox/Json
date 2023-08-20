@@ -1601,7 +1601,7 @@ open class Json {
         /**
          * Gets the version number.
          */
-        const val version = "1.6"
+        const val version = "1.7"
 
         init {
             // Add this project to the updates system, which verifies this class + UUID + version information

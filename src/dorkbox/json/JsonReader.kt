@@ -611,7 +611,7 @@ class JsonReader {
             child.parent = current
             if (current!!.size == 0) current!!.child = child else {
                 val last = lastChild.removeAt(elements.size - 1)
-                last!!.next = child
+                last.next = child
                 child.prev = last
             }
             lastChild.add(child)

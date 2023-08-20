@@ -1114,15 +1114,15 @@ class JsonValue : Iterable<JsonValue?> {
                     var child = `object`.child
                     while (child != null) {
                         if (newLines) indent(indent, buffer)
-                        prettyPrint(child!!, buffer, indent + 1, settings)
-                        if ((!newLines || outputType !== OutputType.minimal) && child!!.next != null) buffer.append(',')
+                        prettyPrint(child, buffer, indent + 1, settings)
+                        if ((!newLines || outputType !== OutputType.minimal) && child.next != null) buffer.append(',')
                         buffer.append(if (newLines) '\n' else ' ')
                         if (wrap && !newLines && buffer.length - start > settings.singleLineColumns) {
                             buffer.setLength(start)
                             newLines = true
                             continue@outer
                         }
-                        child = child!!.next
+                        child = child.next
                     }
 
 

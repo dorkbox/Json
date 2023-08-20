@@ -36,7 +36,7 @@ object Extras {
     // set for the project
     const val description = "Lightweight Kotlin/JSON serialization"
     const val group = "com.dorkbox"
-    const val version = "1.6"
+    const val version = "1.7"
 
     // set as project.ext
     const val name = "Json"
