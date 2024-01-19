@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 dorkbox, llc
+ * Copyright 2024 dorkbox, llc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -318,36 +318,36 @@ open class Json {
      * @param knownType May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      */
-    fun toJson(
+    fun to(
         `object`: Any,
         knownType: Class<*>? = `object`.javaClass,
         elementType: Class<*>? = null
     ): String {
         val buffer = StringWriter()
-        toJson(`object`, knownType, elementType, buffer)
+        to(`object`, knownType, elementType, buffer)
         return buffer.toString()
     }
 
-    fun toJson(`object`: Any, file: File) {
-        toJson(`object`, `object`.javaClass, null, file)
+    fun to(`object`: Any, file: File) {
+        to(`object`, `object`.javaClass, null, file)
     }
 
     /**
      * @param knownType May be null if the type is unknown.
      */
-    fun toJson(`object`: Any, knownType: Class<*>?, file: File) {
-        toJson(`object`, knownType, null, file)
+    fun to(`object`: Any, knownType: Class<*>?, file: File) {
+        to(`object`, knownType, null, file)
     }
 
     /**
      * @param knownType May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      */
-    fun toJson(`object`: Any, knownType: Class<*>?, elementType: Class<*>?, file: File) {
+    fun to(`object`: Any, knownType: Class<*>?, elementType: Class<*>?, file: File) {
         var writer: Writer? = null
         try {
             writer = OutputStreamWriter(FileOutputStream(file), "UTF-8")
-            toJson(`object`, knownType, elementType, writer)
+            to(`object`, knownType, elementType, writer)
         } catch (ex: Exception) {
             throw JsonException("Error writing file: $file", ex)
         } finally {
@@ -358,22 +358,22 @@ open class Json {
         }
     }
 
-    fun toJson(`object`: Any, writer: Writer) {
-        toJson(`object`, `object`.javaClass, null, writer)
+    fun to(`object`: Any, writer: Writer) {
+        to(`object`, `object`.javaClass, null, writer)
     }
 
     /**
      * @param knownType May be null if the type is unknown.
      */
-    fun toJson(`object`: Any, knownType: Class<*>?, writer: Writer) {
-        toJson(`object`, knownType, null, writer)
+    fun to(`object`: Any, knownType: Class<*>?, writer: Writer) {
+        to(`object`, knownType, null, writer)
     }
 
     /**
      * @param knownType May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      */
-    fun toJson(`object`: Any, knownType: Class<*>?, elementType: Class<*>?, writer: Writer) {
+    fun to(`object`: Any, knownType: Class<*>?, elementType: Class<*>?, writer: Writer) {
         setWriter(writer)
 
         try {
@@ -947,27 +947,39 @@ open class Json {
      *
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, reader: Reader): T? {
+    fun <T> fromExplicit(type: Class<T>?, reader: Reader): T? {
         return readValue(type, null, JsonReader().parse(reader))
     }
 
+    inline fun <reified T> from(reader: Reader): T? {
+        return readValue(T::class.java, null, JsonReader().parse(reader))
+    }
+
     /**
      * @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      *
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, elementType: Class<*>?, reader: Reader): T? {
+    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, reader: Reader): T? {
         return readValue(type, elementType, JsonReader().parse(reader))
     }
 
+    inline fun <reified T> from(elementType: Class<*>?, reader: Reader): T? {
+        return readValue(T::class.java, elementType, JsonReader().parse(reader))
+    }
+
     /**
      * @param type May be null if the type is unknown.
      *
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, input: InputStream): T? {
+    fun <T> fromExplicit(type: Class<T>?, input: InputStream): T? {
         return readValue(type, null, JsonReader().parse(input))
+    }
+
+    inline fun <reified T> from(input: InputStream): T? {
+        return readValue(T::class.java, null, JsonReader().parse(input))
     }
 
     /**
@@ -976,8 +988,12 @@ open class Json {
      *
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, elementType: Class<*>?, input: InputStream): T? {
+    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, input: InputStream): T? {
         return readValue(type, elementType, JsonReader().parse(input))
+    }
+
+    inline fun <reified T> from(elementType: Class<*>?, input: InputStream): T? {
+        return readValue(T::class.java, elementType, JsonReader().parse(input))
     }
 
     /**
@@ -985,7 +1001,7 @@ open class Json {
      *
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, file: File): T? {
+    fun <T> fromExplicit(type: Class<T>?, file: File): T? {
         return try {
             readValue(type, null, JsonReader().parse(file))
         } catch (ex: Exception) {
@@ -993,11 +1009,20 @@ open class Json {
         }
     }
 
-    /** @param type May be null if the type is unknown.
+    inline fun <reified T> from(file: File): T? {
+        return try {
+            readValue(T::class.java, null, JsonReader().parse(file))
+        } catch (ex: Exception) {
+            throw JsonException("Error reading file: $file", ex)
+        }
+    }
+
+    /**
+     * @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, elementType: Class<*>?, file: File): T? {
+    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, file: File): T? {
         return try {
             readValue(type, elementType, JsonReader().parse(file))
         } catch (ex: Exception) {
@@ -1005,33 +1030,61 @@ open class Json {
         }
     }
 
-    /** @param type May be null if the type is unknown.
+    inline fun <reified T> from(elementType: Class<*>?, file: File): T? {
+        return try {
+            readValue(T::class.java, elementType, JsonReader().parse(file))
+        } catch (ex: Exception) {
+            throw JsonException("Error reading file: $file", ex)
+        }
+    }
+
+    /**
+     * @param type May be null if the type is unknown.
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, data: CharArray, offset: Int, length: Int): T? {
+    fun <T> fromJExplicit(type: Class<T>?, data: CharArray, offset: Int, length: Int): T? {
         return readValue(type, null, JsonReader().parse(data, offset, length))
     }
 
-    /** @param type May be null if the type is unknown.
+    inline fun <reified T> from(data: CharArray, offset: Int, length: Int): T? {
+        return readValue(T::class.java, null, JsonReader().parse(data, offset, length))
+    }
+
+    /**
+     * @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, elementType: Class<*>?, data: CharArray, offset: Int, length: Int): T? {
+    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, data: CharArray, offset: Int, length: Int): T? {
         return readValue(type, elementType, JsonReader().parse(data, offset, length))
     }
 
-    /** @param type May be null if the type is unknown.
+    inline fun <reified T> from(elementType: Class<*>?, data: CharArray, offset: Int, length: Int): T? {
+        return readValue(T::class.java, elementType, JsonReader().parse(data, offset, length))
+    }
+
+    /**
+     * @param type May be null if the type is unknown.
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, json: String): T? {
+    fun <T> fromExplicit(type: Class<T>?, json: String): T? {
         return readValue(type, null, JsonReader().parse(json))
     }
 
-    /** @param type May be null if the type is unknown.
+    inline fun <reified T> from(json: String): T? {
+        return readValue(T::class.java, null, JsonReader().parse(json))
+    }
+
+    /**
+     * @param type May be null if the type is unknown.
      * @return May be null.
      */
-    fun <T> fromJson(type: Class<T>?, elementType: Class<*>?, json: String): T? {
+    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, json: String): T? {
         return readValue(type, elementType, JsonReader().parse(json))
+    }
+
+    inline fun <reified T> from(elementType: Class<*>?, json: String): T? {
+        return readValue(T::class.java, elementType, JsonReader().parse(json))
     }
 
     fun readField(`object`: Any, name: String, jsonData: JsonValue) {
@@ -1535,7 +1588,7 @@ open class Json {
     }
 
     fun prettyPrint(`object`: Any, singleLineColumns: Int = 0): String {
-        return prettyPrint(toJson(`object`), singleLineColumns)
+        return prettyPrint(to(`object`), singleLineColumns)
     }
 
     fun prettyPrint(json: String, singleLineColumns: Int = 0): String {
@@ -1543,7 +1596,7 @@ open class Json {
     }
 
     fun prettyPrint(`object`: Any, settings: JsonValue.PrettyPrintSettings): String {
-        return prettyPrint(toJson(`object`), settings)
+        return prettyPrint(to(`object`), settings)
     }
 
     fun prettyPrint(json: String, settings: JsonValue.PrettyPrintSettings): String {

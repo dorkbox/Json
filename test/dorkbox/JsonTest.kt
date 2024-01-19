@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 dorkbox, llc
+ * Copyright 2024 dorkbox, llc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,22 +173,22 @@ class JsonTest {
         test.map!!.put("\r\nst\r\nuff\r\n", 9)
         roundTrip(json, test)
 
-        equals(json.toJson("meow"), "meow")
-        equals(json.toJson("meow "), "\"meow \"")
-        equals(json.toJson(" meow"), "\" meow\"")
-        equals(json.toJson(" meow "), "\" meow \"")
-        equals(json.toJson("\nmeow\n"), "\\nmeow\\n")
+        equals(json.to("meow"), "meow")
+        equals(json.to("meow "), "\"meow \"")
+        equals(json.to(" meow"), "\" meow\"")
+        equals(json.to(" meow "), "\" meow \"")
+        equals(json.to("\nmeow\n"), "\\nmeow\\n")
 
-        equals(json.toJson(arrayOf(1, 2, 3), null, Int::class.javaPrimitiveType), "[1,2,3]")
-        equals(json.toJson(arrayOf("1", "2", "3"), null, String::class.java), "[1,2,3]")
-        equals(json.toJson(arrayOf(" 1", "2 ", " 3 "), null, String::class.java), "[\" 1\",\"2 \",\" 3 \"]")
-        equals(json.toJson(arrayOf("1", "", "3"), null, String::class.java), "[1,\"\",3]")
+        equals(json.to(arrayOf(1, 2, 3), null, Int::class.javaPrimitiveType), "[1,2,3]")
+        equals(json.to(arrayOf("1", "2", "3"), null, String::class.java), "[1,2,3]")
+        equals(json.to(arrayOf(" 1", "2 ", " 3 "), null, String::class.java), "[\" 1\",\"2 \",\" 3 \"]")
+        equals(json.to(arrayOf("1", "", "3"), null, String::class.java), "[1,\"\",3]")
         println()
         println("Success!")
     }
 
     private fun roundTrip(json: Json, `object`: Any): String {
-        var text = json.toJson(`object`)
+        var text = json.to(`object`)
         println(text)
         test(json, text, `object`)
         text = json.prettyPrint(`object`, 130)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 dorkbox, llc
+ * Copyright 2024 dorkbox, llc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ class AnnotationTest {
         val json = Json()
 
         val conf = Config()
-        val jsonString = json.toJson(conf)
+        val jsonString = json.to(conf)
 
         // NOTE: hotDog is ignored!!
         Assert.assertEquals("{ip_address:127.0.0.1,server:false,json_client_val:true}", jsonString)
