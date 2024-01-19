@@ -1,7 +1,7 @@
  - Json - Lightweight Kotlin/JSON serialization
    [The Apache Software License, Version 2.0]
    https://git.dorkbox.com/dorkbox/Json
-   Copyright 2023
+   Copyright 2024
      Dorkbox LLC
 
    Extra license information
@@ -23,7 +23,7 @@
      - SLF4J - Simple facade or abstraction for various logging frameworks
        [MIT License]
        https://www.slf4j.org
-       Copyright 2023
+       Copyright 2024
          QOS.ch
 
      - Updates - Software Update Management
