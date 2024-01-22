@@ -17,7 +17,7 @@
        https://github.com/square/moshi
        Copyright 2020
          Square, Inc
-       getRawType() logic for parameters
+       Method logic for getRawType() used for generic parameters
 
      - Kotlin - 
        [The Apache Software License, Version 2.0]
