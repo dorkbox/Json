@@ -12,6 +12,13 @@
          Mario Zechner
          Nathan Sweet
 
+     - Moshi - A modern JSON library for Kotlin and Java
+       [The Apache Software License, Version 2.0]
+       https://github.com/square/moshi
+       Copyright 2020
+         Square, Inc
+       getRawType() logic for parameters
+
      - Kotlin - 
        [The Apache Software License, Version 2.0]
        https://github.com/JetBrains/kotlin

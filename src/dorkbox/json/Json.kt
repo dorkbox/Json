@@ -942,66 +942,83 @@ open class Json {
         if (debug) println("Writing type: " + type.getName())
     }
 
-    /**
-     * @param type May be null if the type is unknown.
-     *
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, reader: Reader): T? {
-        return readValue(type, null, JsonReader().parse(reader))
-    }
+
+
+
+
 
     inline fun <reified T> from(reader: Reader): T? {
-        return readValue(T::class.java, null, JsonReader().parse(reader))
-    }
+        // if we have a generic T, which ALSO has a generic -- get that info (only possible with reified)
+        // see if we can get the data type out of the type passed in.
 
-    /**
-     * @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     *
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, reader: Reader): T? {
-        return readValue(type, elementType, JsonReader().parse(reader))
-    }
+        // this trick will expose the parameter type we are looking for (or null)
+        val parameterType = object : TypeReference<T>() {}.parameterType
 
-    inline fun <reified T> from(elementType: Class<*>?, reader: Reader): T? {
-        return readValue(T::class.java, elementType, JsonReader().parse(reader))
-    }
-
-    /**
-     * @param type May be null if the type is unknown.
-     *
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, input: InputStream): T? {
-        return readValue(type, null, JsonReader().parse(input))
+        return readValue(T::class.java, parameterType, JsonReader().parse(reader))
     }
 
     inline fun <reified T> from(input: InputStream): T? {
-        return readValue(T::class.java, null, JsonReader().parse(input))
+        // if we have a generic T, which ALSO has a generic -- get that info (only possible with reified)
+        // see if we can get the data type out of the type passed in.
+
+        // this trick will expose the parameter type we are looking for (or null)
+        val parameterType = object : TypeReference<T>() {}.parameterType
+
+        return readValue(T::class.java, parameterType, JsonReader().parse(input))
     }
 
-    /**
-     * @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     *
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, input: InputStream): T? {
+    inline fun <reified T> from(file: File): T? {
+        return try {
+            // if we have a generic T, which ALSO has a generic -- get that info (only possible with reified)
+            // see if we can get the data type out of the type passed in.
+
+            // this trick will expose the parameter type we are looking for (or null)
+            val parameterType = object : TypeReference<T>() {}.parameterType
+
+            readValue(T::class.java, parameterType, JsonReader().parse(file))
+        } catch (ex: Exception) {
+            throw JsonException("Error reading file: $file", ex)
+        }
+    }
+
+    inline fun <reified T> from(data: CharArray, offset: Int = 0, length: Int = data.size): T? {
+        // if we have a generic T, which ALSO has a generic -- get that info (only possible with reified)
+        // see if we can get the data type out of the type passed in.
+
+        // this trick will expose the parameter type we are looking for (or null)
+        val parameterType = object : TypeReference<T>() {}.parameterType
+
+        return readValue(T::class.java, parameterType, JsonReader().parse(data, offset, length))
+    }
+
+    inline fun <reified T> from(json: String): T? {
+        // if we have a generic T, which ALSO has a generic -- get that info (only possible with reified)
+        // see if we can get the data type out of the type passed in.
+
+        // this trick will expose the parameter type we are looking for (or null)
+        val parameterType = object : TypeReference<T>() {}.parameterType
+
+        return readValue(T::class.java, parameterType, JsonReader().parse(json))
+    }
+
+
+    fun <T> fromExplicit(type: Class<T>, reader: Reader): T? {
+        return readValue(type, null, JsonReader().parse(reader))
+    }
+
+    fun <T> fromExplicit(type: Class<T>, elementType: Class<*>, reader: Reader): T? {
+        return readValue(type, elementType, JsonReader().parse(reader))
+    }
+
+    fun <T> fromExplicit(type: Class<T>, input: InputStream): T? {
+        return readValue(type, null, JsonReader().parse(input))
+    }
+
+    fun <T> fromExplicit(type: Class<T>, elementType: Class<*>, input: InputStream): T? {
         return readValue(type, elementType, JsonReader().parse(input))
     }
 
-    inline fun <reified T> from(elementType: Class<*>?, input: InputStream): T? {
-        return readValue(T::class.java, elementType, JsonReader().parse(input))
-    }
-
-    /**
-     * @param type May be null if the type is unknown.
-     *
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, file: File): T? {
+    fun <T> fromExplicit(type: Class<T>, file: File): T? {
         return try {
             readValue(type, null, JsonReader().parse(file))
         } catch (ex: Exception) {
@@ -1009,20 +1026,7 @@ open class Json {
         }
     }
 
-    inline fun <reified T> from(file: File): T? {
-        return try {
-            readValue(T::class.java, null, JsonReader().parse(file))
-        } catch (ex: Exception) {
-            throw JsonException("Error reading file: $file", ex)
-        }
-    }
-
-    /**
-     * @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, file: File): T? {
+    fun <T> fromExplicit(type: Class<T>, elementType: Class<*>, file: File): T? {
         return try {
             readValue(type, elementType, JsonReader().parse(file))
         } catch (ex: Exception) {
@@ -1030,62 +1034,34 @@ open class Json {
         }
     }
 
-    inline fun <reified T> from(elementType: Class<*>?, file: File): T? {
-        return try {
-            readValue(T::class.java, elementType, JsonReader().parse(file))
-        } catch (ex: Exception) {
-            throw JsonException("Error reading file: $file", ex)
-        }
-    }
-
-    /**
-     * @param type May be null if the type is unknown.
-     * @return May be null.
-     */
-    fun <T> fromJExplicit(type: Class<T>?, data: CharArray, offset: Int, length: Int): T? {
+    fun <T> fromExplicit(type: Class<T>, data: CharArray, offset: Int, length: Int): T? {
         return readValue(type, null, JsonReader().parse(data, offset, length))
     }
 
-    inline fun <reified T> from(data: CharArray, offset: Int, length: Int): T? {
-        return readValue(T::class.java, null, JsonReader().parse(data, offset, length))
-    }
-
-    /**
-     * @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, data: CharArray, offset: Int, length: Int): T? {
+    fun <T> fromExplicit(type: Class<T>, elementType: Class<*>, data: CharArray, offset: Int, length: Int): T? {
         return readValue(type, elementType, JsonReader().parse(data, offset, length))
     }
 
-    inline fun <reified T> from(elementType: Class<*>?, data: CharArray, offset: Int, length: Int): T? {
-        return readValue(T::class.java, elementType, JsonReader().parse(data, offset, length))
+    fun <T> fromExplicit(type: Class<T>, json: String): T? {
+        // if we have a generic T, which ALSO has a generic -- get that info (only possible with reified)
+        // see if we can get the data type out of the type passed in.
+
+        // this trick will expose the parameter type we are looking for
+        val parameterType = object : TypeReference<T>() {}.parameterType
+
+        return readValue(type, parameterType, JsonReader().parse(json))
     }
 
-    /**
-     * @param type May be null if the type is unknown.
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, json: String): T? {
-        return readValue(type, null, JsonReader().parse(json))
-    }
-
-    inline fun <reified T> from(json: String): T? {
-        return readValue(T::class.java, null, JsonReader().parse(json))
-    }
-
-    /**
-     * @param type May be null if the type is unknown.
-     * @return May be null.
-     */
-    fun <T> fromExplicit(type: Class<T>?, elementType: Class<*>?, json: String): T? {
+    fun <T> fromExplicit(type: Class<T>, elementType: Class<*>, json: String): T? {
         return readValue(type, elementType, JsonReader().parse(json))
     }
 
-    inline fun <reified T> from(elementType: Class<*>?, json: String): T? {
-        return readValue(T::class.java, elementType, JsonReader().parse(json))
-    }
+
+
+
+
+
+
 
     fun readField(`object`: Any, name: String, jsonData: JsonValue) {
         readField(`object`, name, name, null, jsonData)
@@ -1410,7 +1386,7 @@ open class Json {
 
                 var child = jsonData.child
                 while (child != null) {
-                    result.add(readValue(elementType as Class<Any>, null, child))
+                    result.add(readValue(elementType as Class<Any>?, null, child))
                     child = child.next
                 }
                 return result as T

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 dorkbox, llc
+ * Copyright 2024 dorkbox, llc
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +66,14 @@ licensing {
             author("Mario Zechner")
             author("Nathan Sweet")
             url("https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/utils")
+        }
+
+        extra("Moshi", License.APACHE_2) {
+            copyright(2020)
+            description("A modern JSON library for Kotlin and Java")
+            author("Square, Inc")
+            url("https://github.com/square/moshi")
+            note("Method logic for getRawType() used for generic parameters")
         }
     }
 }
